@@ -5,147 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Invitation – Crispin</title>
 <style>
-  :root {
-    --fond:#fdf6f0; --carte:#ffffff; --texte:#3a2f2f; --accent:#c2185b; --bord:#cccccc;
-    box-sizing:border-box;
-    padding-top:env(safe-area-inset-top,0px);
-    padding-bottom:env(safe-area-inset-bottom,0px);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) { --fond:#1b1416; --carte:#2a1f22; --texte:#f3e9e6; --accent:#f06292; --bord:#5a4a4e; }
-  }
-  :root[data-theme="dark"] { --fond:#1b1416; --carte:#2a1f22; --texte:#f3e9e6; --accent:#f06292; --bord:#5a4a4e; }
-  * { box-sizing:border-box; }
-  html { scroll-padding-top:env(safe-area-inset-top,0px); }
-  body { margin:0; font-family:Georgia,serif; background:var(--fond); color:var(--texte); text-align:center; }
-  header { padding:70px 20px; color:#fff; background:linear-gradient(135deg,#c2185b,#ff8a65); }
-  header p { margin:0; letter-spacing:3px; text-transform:uppercase; font-size:14px; }
-  h1 { font-size:2.4rem; margin:14px 0; }
-  .date { font-size:1.2rem; }
-  section { max-width:560px; margin:24px 16px; padding:24px 20px; background:var(--carte); border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,.1); }
-  @media (min-width:620px){ section { margin:24px auto; } }
-  h2 { color:var(--accent); margin-top:0; }
-  .compte { display:flex; justify-content:center; gap:10px; }
-  .bloc { min-width:66px; padding:12px 6px; border-radius:10px; background:var(--accent); color:#fff; }
-  .bloc span { display:block; font-size:1.6rem; font-weight:bold; }
-  .bloc small { font-size:12px; }
-  .infos p { margin:8px 0; font-size:1.05rem; }
-  input, select { width:100%; padding:12px; margin-bottom:10px; border-radius:8px; border:1px solid var(--bord); font-size:16px; font-family:inherit; background:var(--fond); color:var(--texte); }
-  button, .lien { display:inline-block; background:var(--accent); color:#fff; border:none; padding:12px 22px; border-radius:8px; font-size:16px; text-decoration:none; cursor:pointer; font-family:inherit; margin:4px; }
-  #retour, #copie { font-weight:bold; color:var(--accent); }
-  footer { padding:20px; font-size:14px; opacity:.7; }
+:root{--fond:#1a1315;--carte:#2a2025;--champ:#151012;--trait:#3d2f36;--rose:#f06292;--titre:#ec5b8f;--texte:#f6eef2;--doux:#b9a9b0;
+--serif:"Noto Serif",Georgia,"Times New Roman",serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fond);color:var(--texte);font-family:var(--serif);line-height:1.5;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
+.hero{background:linear-gradient(135deg,#c2185b,#ff8f6b);text-align:center;padding:calc(34px + env(safe-area-inset-top,0px)) 20px 30px}
+.sur{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;margin:0 0 10px}
+.hero h1{font-size:1.7rem;line-height:1.2;margin:0 0 8px}
+.hero p{margin:0}
+.carte{background:var(--carte);border-radius:10px;padding:20px;margin:18px auto;max-width:460px;width:calc(100% - 32px);text-align:center}
+.carte h2{color:var(--titre);font-size:1.2rem;margin:0 0 14px}
+.doux{color:var(--doux);font-size:.9rem;margin:0 0 14px}
+.cd{display:flex;gap:8px;justify-content:center}
+.cd div{background:var(--rose);border-radius:8px;min-width:50px;padding:7px 4px;color:#fff}
+.cd b{display:block;font-size:1.2rem;line-height:1.2}
+.cd small{font-size:.62rem}
+.det p{margin:4px 0;font-size:.92rem}
+.btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+input,select{font:inherit;font-size:.9rem;width:100%;padding:10px 12px;border-radius:6px;border:1px solid var(--trait);background:var(--champ);color:var(--texte);margin-bottom:12px;text-align:left}
+input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+.b{display:inline-block;background:var(--rose);color:#fff;border:0;border-radius:6px;padding:10px 16px;font:inherit;font-size:.88rem;text-decoration:none;cursor:pointer}
+.pied{text-align:center;color:var(--doux);font-size:.8rem;margin-top:26px;padding:0 20px}
 </style>
 </head>
 <body>
-
-<header>
-  <p>Vous êtes invité(e)</p>
+<header class="hero">
+  <p class="sur">Vous êtes invité(e)</p>
   <h1>L’anniversaire de Crispin</h1>
-  <div class="date">Lundi 26 octobre 2026 – 16h00</div>
+  <p>Lundi 26 octobre 2026 – 16h00</p>
 </header>
 
-<section>
+<section class="carte">
   <h2>Rendez-vous dans</h2>
-  <div class="compte">
-    <div class="bloc"><span id="j">0</span><small>jours</small></div>
-    <div class="bloc"><span id="h">0</span><small>heures</small></div>
-    <div class="bloc"><span id="m">0</span><small>min</small></div>
-    <div class="bloc"><span id="s">0</span><small>sec</small></div>
-  </div>
+  <div class="cd"><div><b id="j">0</b><small>jours</small></div><div><b id="h">0</b><small>heures</small></div><div><b id="m">0</b><small>min</small></div><div><b id="s">0</b><small>sec</small></div></div>
 </section>
 
-<section class="infos">
+<section class="carte det">
   <h2>Les détails</h2>
   <p>📅 Lundi 26 octobre 2026</p>
   <p>🕖 À partir de 16h00</p>
   <p>📍 Rue Nzolana, Pompage, Kinshasa</p>
   <p>👗 Tenue : chic et décontractée</p>
-  <br>
-  <a class="lien" href="https://maps.google.com/?q=Rue+Nzolana+Pompage+Kinshasa">Voir sur la carte</a>
-  <button id="btnCopier" type="button">Copier l’adresse</button>
-  <p id="copie"></p>
+  <div class="btns">
+    <a class="b" href="https://maps.google.com/?q=Rue%20Nzolana%20Pompage%20Kinshasa" target="_blank" rel="noopener">Voir sur la carte</a>
+    <button class="b" type="button" id="copadr">Copier l’adresse</button>
+  </div>
 </section>
 
-<section>
+<section class="carte">
   <h2>Serez-vous des nôtres ?</h2>
-  <input id="nom" type="text" placeholder="Votre nom">
-  <select id="reponse">
-    <option value="oui">Oui, je viens 🎉</option>
-    <option value="non">Non, je ne peux pas 😢</option>
+  <input id="nom" maxlength="40" placeholder="Votre nom" autocomplete="name" aria-label="Votre nom">
+  <select id="rep" aria-label="Votre réponse">
+    <option>Oui, je viens 🎉</option>
+    <option>Non, je ne peux pas 😢</option>
   </select>
-  <input id="nombre" type="number" min="1" value="1" placeholder="Nombre de personnes">
-  <a id="btnEnvoyer" class="lien" href="#" target="_blank" rel="noopener">Répondre par WhatsApp</a>
-  <button id="btnMsg" type="button">Copier ma réponse</button>
-  <p id="retour"></p>
+  <input id="nb" type="number" min="1" max="20" value="1" aria-label="Nombre de personnes">
+  <div class="btns" style="margin-top:2px">
+    <a class="b" id="wa" href="#" target="_blank" rel="noopener">Répondre par WhatsApp</a>
+    <button class="b" type="button" id="copRep">Copier ma réponse</button>
+  </div>
 </section>
 
-<footer>Avec joie, Crispin Mbelenge Yoka 💖</footer>
+<section class="carte">
+  <h2>Un cadeau ?</h2>
+  <p class="doux">Choisissez votre cadeau : il m’arrive directement sur WhatsApp.</p>
+  <a class="b" href="cadeaux.html">Offrir un cadeau 🎁</a>
+</section>
+
+<p class="pied">Avec joie, Crispin Mbelenge Yoka 💖</p>
 
 <script>
-  // Kinshasa = UTC+1
-  const fete = new Date("2026-10-26T16:00:00+01:00");
-  function maj() {
-    let reste = fete - new Date();
-    if (reste < 0) reste = 0;
-    const s = Math.floor(reste / 1000);
-    document.getElementById("j").textContent = Math.floor(s / 86400);
-    document.getElementById("h").textContent = Math.floor(s % 86400 / 3600);
-    document.getElementById("m").textContent = Math.floor(s % 3600 / 60);
-    document.getElementById("s").textContent = s % 60;
-  }
-  maj();
-  setInterval(maj, 1000);
+const WHATSAPP="243810995926";
+const ADRESSE="Rue Nzolana, Pompage, Kinshasa";
+const $=id=>document.getElementById(id);
 
-  document.getElementById("btnCopier").onclick = async () => {
-    const adresse = "Rue Nzolana, Pompage, Kinshasa";
-    const msg = document.getElementById("copie");
-    try {
-      await navigator.clipboard.writeText(adresse);
-      msg.textContent = "Adresse copiée ✅";
-    } catch (e) {
-      msg.textContent = "Adresse : " + adresse;
-    }
-  };
+// Compteur (heure de Kinshasa, UTC+1)
+const CIBLE=new Date("2026-10-26T16:00:00+01:00");
+function tic(){
+  const t=Math.max(0,Math.floor((CIBLE-Date.now())/1000));
+  $("j").textContent=Math.floor(t/86400);
+  $("h").textContent=Math.floor(t%86400/3600);
+  $("m").textContent=Math.floor(t%3600/60);
+  $("s").textContent=t%60;
+}
+tic();setInterval(tic,1000);
 
-  // Numéro WhatsApp de Crispin (format international sans + ni espaces), ex : "243812345678"
-  const NUMERO = "243810995926";
+// Réponse
+function reponse(){
+  const n=$("nom").value.trim()||"Un invité";
+  const p=Math.max(1,parseInt($("nb").value,10)||1);
+  return "Bonjour Crispin, c’est "+n+". "+$("rep").value+" ("+p+" personne"+(p>1?"s":"")+") pour ton anniversaire du lundi 26 octobre à 16h00.";
+}
+function maj(){$("wa").href="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(reponse())}
+["nom","rep","nb"].forEach(id=>$(id).addEventListener("input",maj));
+maj();
 
-  function preparer(clic) {
-    const nom = document.getElementById("nom").value.trim();
-    const oui = document.getElementById("reponse").value === "oui";
-    const nb = document.getElementById("nombre").value || "1";
-    const retour = document.getElementById("retour");
-    if (!nom) { if (clic) retour.textContent = "Merci d’écrire votre nom."; return null; }
-    const texte = oui
-      ? "Bonjour Crispin, c’est " + nom + ". Je serai présent(e) à ton anniversaire le 26 octobre (" + nb + " personne(s)) 🎉"
-      : "Bonjour Crispin, c’est " + nom + ". Malheureusement je ne pourrai pas venir à ton anniversaire 😢";
-    const base = NUMERO ? "https://wa.me/" + NUMERO : "https://wa.me/";
-    return { texte: texte, url: base + "?text=" + encodeURIComponent(texte) };
-  };
-  const lienWa = document.getElementById("btnEnvoyer");
-  function majWa() { const r = preparer(false); lienWa.href = r ? r.url : "#"; }
-  ["nom", "reponse", "nombre"].forEach(id => {
-    const e = document.getElementById(id);
-    e.addEventListener("input", majWa);
-    e.addEventListener("change", majWa);
-  });
-  lienWa.addEventListener("click", ev => {
-    const r = preparer(true);
-    if (!r) { ev.preventDefault(); return; }
-    document.getElementById("retour").textContent = "Ouverture de WhatsApp… Si rien ne s’ouvre, touchez « Copier ma réponse ».";
-  });
-  document.getElementById("btnMsg").onclick = async () => {
-    const r = preparer(true);
-    if (!r) return;
-    const retour = document.getElementById("retour");
-    try {
-      await navigator.clipboard.writeText(r.texte);
-      retour.textContent = "Message copié ✅ Collez-le dans WhatsApp au +243 810 995 926.";
-    } catch (e) {
-      retour.textContent = r.texte + " (à envoyer au +243 810 995 926)";
-    }
-  };
+// Copier
+function copier(texte,bouton){
+  const fin=()=>{const t=bouton.textContent;bouton.textContent="Copié ✓";setTimeout(()=>bouton.textContent=t,1800)};
+  try{navigator.clipboard.writeText(texte).then(fin,()=>{prompt("Copiez ce texte :",texte)})}
+  catch(e){prompt("Copiez ce texte :",texte)}
+}
+$("copadr").onclick=()=>copier(ADRESSE,$("copadr"));
+$("copRep").onclick=()=>copier(reponse(),$("copRep"));
 </script>
-
 </body>
 </html>
