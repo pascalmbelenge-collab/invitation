@@ -8,6 +8,7 @@
 :root{--fond:#1a1315;--carte:#2a2025;--champ:#151012;--trait:#3d2f36;--rose:#f06292;--titre:#ec5b8f;--texte:#f6eef2;--doux:#b9a9b0;
 --serif:"Noto Serif",Georgia,"Times New Roman",serif}
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{margin:0;background:var(--fond);color:var(--texte);font-family:var(--serif);line-height:1.5;padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
 .hero{background:linear-gradient(135deg,#c2185b,#ff8f6b);text-align:center;padding:calc(34px + env(safe-area-inset-top,0px)) 20px 30px}
 .sur{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;margin:0 0 10px}
@@ -22,9 +23,18 @@ body{margin:0;background:var(--fond);color:var(--texte);font-family:var(--serif)
 .cd small{font-size:.62rem}
 .det p{margin:4px 0;font-size:.92rem}
 .btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
-input,select{font:inherit;font-size:.9rem;width:100%;padding:10px 12px;border-radius:6px;border:1px solid var(--trait);background:var(--champ);color:var(--texte);margin-bottom:12px;text-align:left}
-input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+input,select,textarea{font:inherit;font-size:.9rem;width:100%;padding:10px 12px;border-radius:6px;border:1px solid var(--trait);background:var(--champ);color:var(--texte);margin-bottom:12px;text-align:left}
+textarea{min-height:104px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
 .b{display:inline-block;background:var(--rose);color:#fff;border:0;border-radius:6px;padding:10px 16px;font:inherit;font-size:.88rem;text-decoration:none;cursor:pointer}
+.filtres{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 6px}
+.filtres button{font:inherit;font-size:.85rem;color:var(--rose);background:transparent;border:1px solid var(--rose);border-radius:999px;padding:5px 14px;cursor:pointer}
+.filtres button[aria-pressed="true"]{background:var(--rose);color:#fff}
+.cadeau{display:flex;gap:14px;align-items:flex-start;text-align:left;padding:16px 0 4px;margin-top:14px;border-top:1px solid var(--trait)}
+.cadeau[hidden]{display:none}
+.e{flex:none;width:52px;height:52px;border-radius:10px;background:#3a2530;display:flex;align-items:center;justify-content:center;font-size:1.7rem}
+.cadeau h3{font-size:1rem;margin:0 0 2px}
+.cadeau p{margin:0 0 10px;color:var(--doux);font-size:.88rem}
 .pied{text-align:center;color:var(--doux);font-size:.8rem;margin-top:26px;padding:0 20px}
 </style>
 </head>
@@ -44,12 +54,7 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
   <h2>Les détails</h2>
   <p>📅 Lundi 26 octobre 2026</p>
   <p>🕖 À partir de 16h00</p>
-  <p>📍 Rue Nzolana, Pompage, Kinshasa</p>
   <p>👗 Tenue : chic et décontractée</p>
-  <div class="btns">
-    <a class="b" href="https://maps.google.com/?q=Rue%20Nzolana%20Pompage%20Kinshasa" target="_blank" rel="noopener">Voir sur la carte</a>
-    <button class="b" type="button" id="copadr">Copier l’adresse</button>
-  </div>
 </section>
 
 <section class="carte">
@@ -66,18 +71,28 @@ input:focus-visible,select:focus-visible,button:focus-visible,a:focus-visible{ou
   </div>
 </section>
 
-<section class="carte">
-  <h2>Un cadeau ?</h2>
-  <p class="doux">Choisissez votre cadeau : il m’arrive directement sur WhatsApp.</p>
-  <a class="b" href="cadeaux.html">Offrir un cadeau 🎁</a>
+<section class="carte" id="message">
+  <h2>Votre message</h2>
+  <p class="doux">Il sera envoyé avec le cadeau que vous choisirez.</p>
+  <input id="gnom" maxlength="30" placeholder="Votre prénom" autocomplete="given-name" aria-label="Votre prénom">
+  <textarea id="voeu" maxlength="300" aria-label="Votre souhait"></textarea>
+  <button class="b" id="autre" type="button">Générer un autre souhait</button>
+</section>
+
+<section class="carte" id="cadeaux">
+  <h2>Choisissez un cadeau 🎁</h2>
+  <p class="doux">Touchez « Choisir » : WhatsApp s’ouvre avec votre cadeau et votre souhait.</p>
+  <div class="filtres" id="filtres"></div>
+  <div id="liste"></div>
 </section>
 
 <p class="pied">Avec joie, Crispin Mbelenge Yoka 💖</p>
 
 <script>
 const WHATSAPP="243810995926";
-const ADRESSE="Rue Nzolana, Pompage, Kinshasa";
 const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x)e.textContent=x;return e};
+const lien=t=>"https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(t);
 
 // Compteur (heure de Kinshasa, UTC+1)
 const CIBLE=new Date("2026-10-26T16:00:00+01:00");
@@ -90,24 +105,77 @@ function tic(){
 }
 tic();setInterval(tic,1000);
 
-// Réponse
+// Réponse à l'invitation
 function reponse(){
   const n=$("nom").value.trim()||"Un invité";
   const p=Math.max(1,parseInt($("nb").value,10)||1);
   return "Bonjour Crispin, c’est "+n+". "+$("rep").value+" ("+p+" personne"+(p>1?"s":"")+") pour ton anniversaire du lundi 26 octobre à 16h00.";
 }
-function maj(){$("wa").href="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(reponse())}
-["nom","rep","nb"].forEach(id=>$(id).addEventListener("input",maj));
-maj();
+function majRep(){$("wa").href=lien(reponse())}
+["nom","rep","nb"].forEach(id=>$(id).addEventListener("input",majRep));
+majRep();
+$("copRep").onclick=()=>{
+  const b=$("copRep");
+  const fin=()=>{const t=b.textContent;b.textContent="Copié ✓";setTimeout(()=>b.textContent=t,1800)};
+  try{navigator.clipboard.writeText(reponse()).then(fin,()=>prompt("Copiez ce texte :",reponse()))}
+  catch(e){prompt("Copiez ce texte :",reponse())}
+};
 
-// Copier
-function copier(texte,bouton){
-  const fin=()=>{const t=bouton.textContent;bouton.textContent="Copié ✓";setTimeout(()=>bouton.textContent=t,1800)};
-  try{navigator.clipboard.writeText(texte).then(fin,()=>{prompt("Copiez ce texte :",texte)})}
-  catch(e){prompt("Copiez ce texte :",texte)}
+// Cadeaux
+const SOUHAITS=[
+"Joyeux anniversaire ! Que cette nouvelle année t’apporte santé, bonheur et de belles réussites. Profite bien de ta journée !",
+"Joyeux anniversaire ! Je te souhaite une année sans bug, sans panne et pleine de succès.",
+"Bon anniversaire ! Que tous tes projets se réalisent et que cette année soit encore meilleure que la précédente.",
+"Joyeux anniversaire ! Beaucoup de joie, de rires et de moments inoubliables avec tes proches aujourd’hui et toute l’année.",
+"Bon anniversaire ! Merci d’être là : je te souhaite une journée magnifique, remplie de belles surprises.",
+"Joyeux anniversaire ! Que le bonheur, la santé et la réussite t’accompagnent chaque jour de cette nouvelle année."
+];
+// [emoji, titre, description, groupe] i = informatique, p = plaisir
+const CADEAUX=[
+["⌨️","Un clavier mécanique","Des touches qui claquent pour coder avec plaisir.","i"],
+["🖱️","Une souris ergonomique","Moins de fatigue au poignet après des heures de code.","i"],
+["🖥️","Un écran 4K","Plus d’espace pour le code, les logs et la doc.","i"],
+["💾","Un SSD externe","Rapide et fiable pour sauvegarder ses projets.","i"],
+["💻","Un ordinateur portable","Puissant et léger, pour travailler de partout.","i"],
+["💺","Un siège de bureau ergonomique","Pour tenir de longues journées devant l’écran.","i"],
+["🎧","Un casque à réduction de bruit","Pour rester concentré dans le flow.","i"],
+["🎓","Une formation en ligne","Cloud, cybersécurité ou IA : une compétence de plus.","i"],
+["🎮","Un jeu vidéo","Le titre dont on parle depuis des mois.","p"],
+["🍽️","Un dîner au restaurant","Une table réservée, sans rien à organiser.","p"],
+["⌚","Une montre","Sobre, élégante, qui dure.","p"],
+["🧳","Un week-end surprise","Destination secrète, valise légère.","p"]
+];
+let last=-1;
+function souhait(){let i;do{i=Math.floor(Math.random()*SOUHAITS.length)}while(i===last);last=i;$("voeu").value=SOUHAITS[i];majCad()}
+function message(g){
+  const n=$("gnom").value.trim(),w=$("voeu").value.trim();
+  return "🎁 Cadeau choisi : "+g[0]+" "+g[1]+"\n"+g[2]+(w?"\n\n🎂 "+w:"")+(n?"\n\n— "+n:"");
 }
-$("copadr").onclick=()=>copier(ADRESSE,$("copadr"));
-$("copRep").onclick=()=>copier(reponse(),$("copRep"));
+function majCad(){document.querySelectorAll("a[data-i]").forEach(a=>a.href=lien(message(CADEAUX[a.dataset.i])))}
+
+CADEAUX.forEach((g,i)=>{
+  const c=el("article","cadeau");c.dataset.g=g[3];
+  c.appendChild(el("div","e",g[0]));
+  const d=el("div");
+  d.appendChild(el("h3","",g[1]));
+  d.appendChild(el("p","",g[2]));
+  const b=el("a","b","Choisir ce cadeau");
+  b.dataset.i=i;b.target="_blank";b.rel="noopener";
+  d.appendChild(b);c.appendChild(d);$("liste").appendChild(c);
+});
+[["t","Tous"],["i","Informatique"],["p","Plaisir"]].forEach(([k,t],j)=>{
+  const b=el("button","",t);b.type="button";b.setAttribute("aria-pressed",j===0);
+  b.onclick=()=>{
+    document.querySelectorAll("#filtres button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+    document.querySelectorAll(".cadeau").forEach(c=>c.hidden=!(k==="t"||c.dataset.g===k));
+  };
+  $("filtres").appendChild(b);
+});
+try{const n=localStorage.getItem("invite-nom");if(n)$("gnom").value=n}catch(e){}
+$("gnom").addEventListener("input",e=>{try{localStorage.setItem("invite-nom",e.target.value)}catch(x){}majCad()});
+$("voeu").addEventListener("input",majCad);
+$("autre").onclick=souhait;
+souhait();
 </script>
 </body>
 </html>
