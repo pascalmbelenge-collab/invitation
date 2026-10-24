@@ -132,18 +132,12 @@ const SOUHAITS=[
 ];
 // [emoji, titre, description, groupe] i = informatique, p = plaisir
 const CADEAUX=[
-["⌨️","Un clavier mécanique","Des touches qui claquent pour coder avec plaisir.","i"],
-["🖱️","Une souris ergonomique","Moins de fatigue au poignet après des heures de code.","i"],
-["🖥️","Un écran 4K","Plus d’espace pour le code, les logs et la doc.","i"],
-["💾","Un SSD externe","Rapide et fiable pour sauvegarder ses projets.","i"],
 ["💻","Un ordinateur portable","Puissant et léger, pour travailler de partout.","i"],
-["💺","Un siège de bureau ergonomique","Pour tenir de longues journées devant l’écran.","i"],
+["🖥️","Un écran 4K","Plus d’espace pour le code, les logs et la doc.","i"],
+["⌨️","Un clavier mécanique","Des touches qui claquent pour coder avec plaisir.","i"],
 ["🎧","Un casque à réduction de bruit","Pour rester concentré dans le flow.","i"],
-["🎓","Une formation en ligne","Cloud, cybersécurité ou IA : une compétence de plus.","i"],
-["🎮","Un jeu vidéo","Le titre dont on parle depuis des mois.","p"],
-["🍽️","Un dîner au restaurant","Une table réservée, sans rien à organiser.","p"],
 ["⌚","Une montre","Sobre, élégante, qui dure.","p"],
-["🧳","Un week-end surprise","Destination secrète, valise légère.","p"]
+["🍽️","Un dîner au restaurant","Une table réservée, sans rien à organiser.","p"]
 ];
 let last=-1;
 function souhait(){let i;do{i=Math.floor(Math.random()*SOUHAITS.length)}while(i===last);last=i;$("voeu").value=SOUHAITS[i];majCad()}
